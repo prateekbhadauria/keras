@@ -1,0 +1,50 @@
+i am PhD Scholar from Thapar Institute of Engineering and Technology ,Patila ,Punjab,INDIA,  as i am currently working on CNN implementation ,so i need some help from your side i was stuck from last few weeks , as i have four training datasets whose size is (20, 100000) and two target datasets ,'so
+i need the test results for different architectures of the net.  The performance metric should be MSE. By architecutre I mean number of convolutional layers. I need a graph of the test performance in terms of MSE with the no. of convolutional layers in the net (depth of the net).
+i tried to implement this but everytime  i got some error ,kindly help i will highly obliged to you.
+
+Actually i was little bit confused in their dimension how could i reshape it in this code .
+
+from keras.models import Sequential
+from tensorflow.contrib.keras.api.keras.layers import Dense, Dropout, Flatten
+from keras.layers import Convolution2D, MaxPooling2D, convolutional
+import numpy as np
+import tensorflow as tf
+from matplotlib import pyplot
+from sklearn.datasets import make_regression
+from sklearn.metrics import mean_squared_error
+from keras.wrappers.scikit_learn import KerasRegressor
+from sklearn.preprocessing import StandardScaler
+from keras import models
+from keras import layers
+import matplotlib as plt
+from sklearn.neural_network import MLPRegressor
+import sklearn.metrics as metrics
+import pandas as pd
+from keras.optimizers import SGD
+from sklearn.cross_validation import train_test_split
+from keras.utils import np_utils
+
+
+Bx_train, Bx_test, Fx_train, Fx_test  = train_test_split(Bx, Fx, test_size=0.2, random_state=0)
+
+scaler = StandardScaler()  
+scaler.fit(Bx_train)      
+Bx_train = scaler.transform(Bx_train)
+Bx_test = scaler.transform(Bx_test)
+
+model = models.Sequential()
+model.add(np.reshape((1, 39998, 20, 1)))
+model.add(Convolution2D(32, 3 , 3, activation='relu', input_shape=(128, 128, 3)))
+model.add(Convolution2D(32, 3, 3, activation='relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.5))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(10, activation='sigmoid'))
+# 6. Compile model
+model.compile(loss='mse', optimizer ='adam', metrics=['mse'])
+# 7. Fit model on training data
+model.fit(Bx_train, Fx_train, batch_size=32, nb_epoch=10, verbose=1)
+# 8. Evaluate model on test data
+score = model.evaluate(Bx_test, Fx_test, verbose=0)
